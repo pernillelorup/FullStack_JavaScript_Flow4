@@ -7,16 +7,43 @@
 
 >## Explain shortly about GraphQL, its purpose and some of its use cases
 
+### GraphQL Explained & Purpose
+* GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data. 
+
+* GraphQL provides a complete and understandable description of the data in your API, gives clients the power to ask for exactly what they need and nothing more, makes it easier to evolve APIs over time, and enables powerful developer tools.
+
+* GraphQL got its start at big old Facebook, but even much simpler apps can often bump into the limitations of traditional REST APIs.
+
+* Provides a query language like REST that can fetch all needed data in one easy fetch unlike REST.
+
+
+### GraphQL Use Cases
+
+* For large complicated fetches with lots of data and arrays GraphQL provides an easy way to query
+
+* With GraphQL you also don't risk overfetching, because you write the specific data you want. 
+
 
 <br>
 
 >## Explain some of the Server Architectures that can be implemented with a GraphQL backend
 
+GraphQL can be used to setup endpoints for fetching data from a database.
 
 <br>
 
 >## What is meant by the terms over- and under-fetching in relation to REST
 
+### Over-fetching
+Over-fetching is fetching too much data, meaning there is data in the reponse you don't use.
+
+### Under-fetching
+Under-fetching is not having enough data after calling to an endpoint, leading you to call a second endpoint with is inefficient.
+
+In both cases, they are performances issues : you either use more bandwidth than you should, or you are making more HTTP requests that you should.
+
+GraphQL fixes this by letting you select the data you need in a simple way, it could also be achieved with REST by using DTO's.
+GraphQL doesn't allow overposting, due to the built-in schema validation.
 
 <br>
 
