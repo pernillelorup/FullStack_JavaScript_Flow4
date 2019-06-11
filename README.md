@@ -40,6 +40,7 @@ Over-fetching is fetching too much data, meaning there is data in the reponse yo
 ### Under-fetching
 Under-fetching is not having enough data after calling to an endpoint, leading you to call a second endpoint with is inefficient.
 
+### Issue & Solution
 In both cases, they are performances issues : you either use more bandwidth than you should, or you are making more HTTP requests that you should.
 
 GraphQL fixes this by letting you select the data you need in a simple way, it could also be achieved with REST by using DTO's.
@@ -48,12 +49,106 @@ GraphQL doesn't allow overposting, due to the built-in schema validation.
 <br>
 
 >## Explain shortly about GraphQL’s type system and some of the benefits we get from this
+### GraphQL Query
 
+1. hero is our "root" object
+2. For the object returned by hero, we select the name and appearsIn fields
+```
+{
+  hero {
+    name
+    appearsIn
+  }
+}
+```
+### GraphQL Query Result
+
+This returns hero with the name and appearsIn data.
+```
+{
+  "data": {
+    "hero": {
+      "name": "R2-D2",
+      "appearsIn": [
+        "NEWHOPE",
+        "EMPIRE",
+        "JEDI"
+      ]
+    }
+  }
+}
+```
+* You get the exact info you ask for, where in REST if hero has more fields those would also usally be fetched.
+
+* Benefit is that we can reduce the amount of code and simplify our queries.
 
 <br>
 
 >## Explain shortly about GraphQL Schema Definition Language, and provide a number of examples of schemas you have defined.
 
+### GraphQL comes with a set of default scalar types out of the box:
+
+* Int: A signed 32‐bit integer.
+* Float: A signed double-precision floating-point value.
+* String: A UTF‐8 character sequence.
+* Boolean: true or false.
+* ID: The ID scalar type represents a unique identifier, often used to refetch an object or as the key for a cache. The ID type is serialized in the same way as a String; however, defining it as an ID signifies that it is not intended to be human‐readable.
+
+### Schema example
+
+```js
+const typeDefs = `
+  scalar Coordinates // custom scalar
+  scalar Date // custom scalar
+  
+  type Query {
+    getAllUsers: [User]
+    getUserByUsername(userName: String!): User
+    getUserByID(id: String!): User
+    getAllLocationBlogs: [Blog]
+    getBlogByID(id: String!): Blog
+    isUserinArea(areaname: String!, username: String!): UserInArea
+    getDistanceToUser(lon: Int!, lat: Int!, username: String! ): DistanceToUser
+  }
+
+  type Mutation {
+    addUser(input: UserInput): User
+    addLocationBlog(input: BlogInput): Blog
+    likeLocationBlog(input: LikeBlogInput ): Blog
+  }
+
+  type User {
+    _id: ID
+    firstName: String!
+    lastName: String!
+    userName: String!
+    password: String!
+    email: String!
+  }
+
+  type Blog {
+    likedBy: [User]
+    info: String
+    pos: BlogPosition
+    author: User
+    created: Date
+  }
+  
+    input UserInput {
+    firstName: String!
+    lastName: String!
+    userName: String!
+    password: String!
+    email: String!
+  }
+
+  input BlogInput {
+    info: String!
+    img: String
+    pos: BlogPositionInput!
+    author: String!
+  }
+```
 
 <br>
 
