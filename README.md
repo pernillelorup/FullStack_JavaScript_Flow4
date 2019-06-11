@@ -154,6 +154,37 @@ const typeDefs = `
 
 >## Provide a number of examples demonstrating data fetching with GraphQL. You should provide examples both running in a Sandbox/playground and examples executed in an Apollo Client
 
+```js
+import React from "react"
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
+
+
+
+const GET_DOG_PHOTO = gql`
+  query Dog($breed: String!) {
+    dog(breed: $breed) {
+      id
+      displayImage
+    }
+  }
+`;
+
+const DogPhoto = ({ breed }) => (
+  <Query query={GET_DOG_PHOTO} variables={{ breed }}>
+    {({ loading, error, data }) => {
+      if (loading) return null;
+      if (error) return `Error! ${error}`;
+
+      return (
+        <img alt="dog" src={data.dog.displayImage} style={{ height: 100, width: 100 }} />
+      );
+    }}
+  </Query>
+);
+
+export default DogPhoto;
+```
 
 <br>
 
@@ -164,17 +195,105 @@ const typeDefs = `
 
 >## Explain the Concept of a Resolver function, and provide a number of simple examples of resolvers you have implemented in a GraphQL Server.
 
+### Resolver Explained
+The resolver function accesses a database and then constructs and returns an object.
+For example below you can see that the resolver fetches all Users and returns them, the schema then is set to take a liste of Users.
+
+```js
+const resolvers = {
+	Query: {
+		getAllUsers: async () => {
+			return await userFacade.getAllUsers();
+		},
+		getUserByUsername: async (_, { userName }) => await userFacade.findByUsername(userName),
+		getUserByID: async (_, { id }) => await userFacade.findById(id),
+		getAllLocationBlogs: async () => await blogFacade.getAllLocationBlogs(),
+		getBlogByID: async (_, { id }) => await blogFacade.likeLocationBlog(id),
+		isUserinArea: async (_, { areaname, username }) => {
+			var obj = await queryFacade.isUserinArea(areaname, username).catch((err) => {
+				return { msg: err.message };
+			});
+			if (obj !== undefined) {
+				return { status: obj.status, msg: obj.msg };
+			}
+		},
+		getDistanceToUser: async (_, { lon, lat, username }) => {
+			var obj = await queryFacade.getDistanceToUser(lon, lat, username).catch((err) => {
+				return { msg: err.message };
+			});
+			if (obj !== undefined) {
+				return { distance: obj.distance, to: obj.username  };
+			}
+		},
+	},
+	Mutation: {
+		addUser: async (_, { input }) => {
+			return await userFacade.addUser(input.firstName, input.lastName, input.userName, input.password, input.email);
+		},
+		addLocationBlog: async (_, { input }) => {
+			return await blogFacade.addLocationBlog(input.info, input.img, input.pos, input.author);
+		},
+		likeLocationBlog: async (_, { input }) => {
+			return await blogFacade.likeLocationBlog(input.blogID, input.userID);
+		},
+	}
+};
+```
 
 <br>
 
 >## Explain the benefits we get from using a library like Apollo-client, compared to using the plain fetch-API
+
+* The Apollo client provides React-Apollo, which makes the frontend familiar to us react devs.
+* Apollo makes the use of GraphQL easy, for example it allows for dynamic querying because we can use dynamic variables.
+
+**Check Dog Photo example above**
 
 
 <br>
 
 >## In an Apollo-based React Component, demonstrate how to perform GraphQL Queries, including:
 * **Explain the structure of the Query Component***
+```js
+  type Query {
+    getAllUsers: [User]
+    getUserByUsername(userName: String!): User
+    getUserByID(id: String!): User
+    getAllLocationBlogs: [Blog]
+    getBlogByID(id: String!): Blog
+    isUserinArea(areaname: String!, username: String!): UserInArea
+    getDistanceToUser(lon: Int!, lat: Int!, username: String! ): DistanceToUser
+  }
+```
 * **Explain the purpose of ApolloClient and the ApolloProvider component**
+
+Apollo Client is a community-driven effort to build an easy-to-understand, flexible and powerful GraphQL client. Apollo has the ambition to build one library for every major development platform that people use to build web and mobile applications and so far the ones below exist:
+* JavaScript
+  * React
+  * Angular
+  * Vue
+  * Meteor
+  * Ember
+* Web Components
+  * Polymer
+  * lit-apollo
+* Native mobile
+  * Native iOS with Swift
+  * Native Android with Java
+```js
+<ApolloProvider client={client}>
+  <div>
+    <h2>Building Query components (DOG) 🚀</h2>
+    <Dogs/>
+  </div>
+</ApolloProvider>
+      
+const client = new ApolloClient({
+  //uri: `https://32ypr38l61.sse.codesandbox.io/`
+  uri: `http://localhost:4000/`
+});
+```
+
 * **Explain the purpose of the gql-function (imported from graphql-tag)**
 
 <br>
