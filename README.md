@@ -30,6 +30,33 @@
 
 GraphQL can be used to setup endpoints for fetching data from a database.
 
+GraphQL Server can be deployed by using any of the three methods listed below −
+
+* GraphQL server with connected database
+* GraphQL server that integrates existing systems
+* Hybrid approach
+
+### GraphQL Server with Connected Database
+This architecture has a GraphQL Server with an integrated database and can often be used with new projects. On the receipt of a Query, the server reads the request payload and fetches data from the database. This is called resolving the query. The response returned to the client adheres to the format specified in the official GraphQL specification.
+
+<img src="https://www.tutorialspoint.com/graphql/images/graphql_server_connected_database.jpg" width="500">
+
+In the above diagram, GraphQL server and the database are integrated on a single node. The client (desktop/mobile) communicates with GraphQL server over HTTP. The server processes the request, fetches data from the database and returns it to the client.
+
+
+### GraphQL Server Integrating Existing Systems
+This approach is helpful for companies which have legacy infrastructure and different APIs. GraphQL can be used to unify microservices, legacy infrastructure and third-party APIs in the existing system.
+
+<img src="https://www.tutorialspoint.com/graphql/images/graphql_server_integrating_existing_systems.jpg" width="500">
+
+In the above diagram, a GraphQL API acts as an interface between the client and the existing systems. Client applications communicate with the GraphQL server which in turn resolves the query.
+
+
+### Hybrid Approach
+Finally, we can combine the above two approaches and build a GraphQL server. In this architecture, the GraphQL server will resolve any request that is received. It will either retrieve data from connected database or from the integrated API’s. This is represented in the below figure −
+
+<img src="https://www.tutorialspoint.com/graphql/images/graphql_hybrid_approach.jpg" width="500">
+
 <br>
 
 >## What is meant by the terms over- and under-fetching in relation to REST
@@ -189,6 +216,7 @@ export default DogPhoto;
 <br>
 
 >## Provide a number of examples demonstrating creating, updating and deleting with Mutations. You should provide examples both running in a Sandbox/playground and examples executed in an Apollo Client.
+
 
 
 <br>
